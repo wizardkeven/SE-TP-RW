@@ -3,6 +3,7 @@ package jus.poc.rw;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import sun.nio.cs.ext.IBM037;
@@ -120,16 +121,16 @@ public class Simulator{
 		for (int i = 0; i < nbReaders; i++) {
 			readers[i] = new Reader(aleaUsingReader, aleaVacanReader,aleaIterationWriter, 
 					rePool.selection(1), observator,readWriteLock);
-			IResource[] resVersion= rePool.selection(1);
-			readers[i].acquire(resVersion[0]);
+//			IResource[] resVersion= rePool.selection(1);
+//			readers[i].acquire(resVersion[0]);
 			readers[i].start();
 //			System.out.println(readers[i].getName() + " of ID: " + readers[i].getId());
 		}
 		for (int i = 0; i < nbWriters; i++) {
 			writers[i] = new Writer(aleaUsingWiriter, aleaVacanWriter, 
 					aleaIterationWriter, rePool.selection(1), observator,readWriteLock);
-			IResource[] resVersion= rePool.selection(1);
-			writers[i].acquire(resVersion[0]);
+//			IResource[] resVersion= rePool.selection(1);
+//			writers[i].acquire(resVersion[0]);
 			writers[i].start();
 //			System.out.println(writers[i].getName() + " of ID: " + writers[i].getId());
 		}

@@ -5,6 +5,9 @@
  */
 package jus.poc.rw;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import jus.poc.rw.Aleatory;
 import jus.poc.rw.IResource;
 import jus.poc.rw.control.IObservator;
@@ -30,6 +33,11 @@ public abstract class Actor extends Thread{
 	protected int nbIteration;
 	/** the rank of the last access done or under execution */
 	protected int accessRank;
+	
+	private Resource resPre;//une resource utilisé pour objectif 1
+	
+	
+	
 	/**
 	 * Constructor
 	 * @param useLaw the gaussian law for using delay
@@ -38,7 +46,7 @@ public abstract class Actor extends Thread{
 	 * @param selection the resources to used
 	 * @param observator th observator of the comportment
 	 */
-	public Actor(Aleatory useLaw, Aleatory vacationLaw, Aleatory iterationLaw, IResource[] selection, IObservator observator){
+	public Actor(Aleatory useLaw, Aleatory vacationLaw, Aleatory iterationLaw, IResource[] selection, IObservator observator,ReentrantReadWriteLock readWriteLock){
 		this.ident = identGenerator++;
 		resources = selection;
 		this.useLaw = useLaw;
@@ -52,11 +60,25 @@ public abstract class Actor extends Thread{
 	 */
 	public void run(){
 		// to be completed
+		resPre = (Resource) resources[0];
 		for(accessRank=1; accessRank!=nbIteration; accessRank++) {
 			temporizationVacation(vacationLaw.next());
-			acquire();
+			try {
+				acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DeadLockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			temporizationUse(useLaw.next());
-			release();
+			try {
+				release();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	/**
@@ -73,15 +95,22 @@ public abstract class Actor extends Thread{
 	}
 	/**
 	 * the acquisition stage of the resources.
+	 * @throws DeadLockException 
+	 * @throws InterruptedException 
 	 */
-	private void acquire(){
+	private void acquire() throws InterruptedException, DeadLockException{
 		// to be completed
+		//Resource res = (Resource) resources[0]; 
+		acquire(resPre);
 	}
 	/**
 	 * the release stage of the resources prevously acquired
+	 * @throws InterruptedException 
 	 */
-	private void release(){
+	private void release() throws InterruptedException{
 		// to be completed
+		release(resPre);
+		
 	}
 	/**
 	 * Restart the actor at the start of his execution, having returned all the resources acquired.
@@ -113,4 +142,5 @@ public abstract class Actor extends Thread{
 	 * @return the rank of the last access done or under execution
 	 */
 	public final int accessRank(){return accessRank;}
+	
 }
