@@ -136,6 +136,7 @@ public class Simulator{
 			writers[i].start();
 //			System.out.println(writers[i].getName() + " of ID: " + writers[i].getId());
 		}
+		System.out.println("Il y a "+nbReaders+" readers, "+nbWriters+" writers et "+nbResources+" resources");
 		
 		
 //		ExecutorService rWManager = Executors.newCachedThreadPool() ;

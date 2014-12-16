@@ -13,7 +13,7 @@ import jus.poc.rw.v1.Version;
 public class Writer extends Actor{
 
 	
-	private ReentrantReadWriteLock writerLock = null;
+//	public ReentrantReadWriteLock writerLock = null;
 //	double acquireTime = 0; //  le temps de debut d'accéder à la ressouce
 //	double occupyTime = 0; // le temps total d'usage
 //	private Version resLocal;
@@ -22,7 +22,7 @@ public class Writer extends Actor{
 			IResource[] selection, IObservator observator, ReentrantReadWriteLock readWriteLock) {
 		super(useLaw, vacationLaw, iterationLaw, selection, observator, readWriteLock);
 		// TODO Auto-generated constructor stub
-		writerLock = (ReentrantReadWriteLock) readWriteLock;
+//		writerLock = (ReentrantReadWriteLock) readWriteLock;
 	
 	}
 
@@ -30,11 +30,11 @@ public class Writer extends Actor{
 	protected void acquire(IResource resource) throws InterruptedException,
 			DeadLockException {
 		// TODO Auto-generated method stub
-		writerLock.writeLock().lock();
-//		resLocal = (Version) resource;
-		Version.setCurrentUser(this.getName()); //une fois obtenir la droit de y'acceder, on déclare l'occupation actuelle.
-		resPre.setAcquireTime(new Date());
-		AcquireTime = resPre.getAcquireTime();
+//		writerLock.writeLock().lock();
+		resPre.beginW(this);
+//		Version.setCurrentUser(this.getName()); //une fois obtenir la droit de y'acceder, on déclare l'occupation actuelle.
+//		resPre.setAcquireTime(new Date());
+//		AcquireTime = resPre.getAcquireTime();
 //		System.out.println("Je suis "+ getName()+ " dont ID est "
 //				+ getId() + "en train de lire: "+ resLocal.getMsg()+ " à "+ resLocal.getAcquireTime());
 	}
@@ -42,11 +42,12 @@ public class Writer extends Actor{
 	@Override
 	protected void release(IResource resource) throws InterruptedException {
 		// TODO Auto-generated method stub
-		resPre.setReleaseTime(new Date());;
-		releaseTime = resPre.getReleaseTime();
-		PrintMessage("write");
-//		System.out.println(getName()+" dont ID est "+getId()+" releasé à " + resLocal.getReleaseTime()+" en ecrivant "+occupyTime+" ms"); // Calculer le temps total d'utiliser le useLaw.next()
-		writerLock.writeLock().unlock();
+		resPre.endW(this);
+//		resPre.setReleaseTime(new Date());;
+//		releaseTime = resPre.getReleaseTime();
+//		PrintMessage("write");
+////		System.out.println(getName()+" dont ID est "+getId()+" releasé à " + resLocal.getReleaseTime()+" en ecrivant "+occupyTime+" ms"); // Calculer le temps total d'utiliser le useLaw.next()
+//		writerLock.writeLock().unlock();
 		
 	}
 

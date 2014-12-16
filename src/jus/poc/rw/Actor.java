@@ -5,6 +5,8 @@
  */
 package jus.poc.rw;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -36,9 +38,11 @@ public abstract class Actor extends Thread{
 	protected int accessRank;
 	
 	protected Version resPre;//une resource utilisé pour objectif 1
-	protected int occupyTime;
-	protected String AcquireTime;
-	protected String releaseTime;
+	private int occupyTime;
+	private String AcquireTime; 
+	SimpleDateFormat formatDate; //date formatting tool
+	public ReentrantReadWriteLock lock;//lock for all members
+	private String releaseTime;
 	
 	
 	
@@ -59,6 +63,8 @@ public abstract class Actor extends Thread{
 		nbIteration=iterationLaw.next();
 		setName(getClass().getSimpleName()+"-"+ident());
 		this.observator=observator;
+		formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS");
+		lock = readWriteLock;
 	}
 	/**
 	 * the behavior of an actor accessing to a resource.
@@ -66,7 +72,7 @@ public abstract class Actor extends Thread{
 	public void run(){
 		// to be completed
 		observator.startActor(this);
-		System.out.println(observator.toString()+" see that "+getName()+" start!");
+		System.out.println(observator.toString()+" see that "+getName()+" is starting!");
 		resPre = (Version) resources[0];
 		for(accessRank=1; accessRank!=nbIteration; accessRank++) {
 			temporizationVacation(vacationLaw.next());
@@ -79,8 +85,8 @@ public abstract class Actor extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			occupyTime = useLaw.next();
-			temporizationUse(occupyTime);
+			setOccupyTime(useLaw.next());
+			temporizationUse(getOccupyTime());
 			try {
 				release();
 			} catch (InterruptedException e) {
@@ -89,7 +95,7 @@ public abstract class Actor extends Thread{
 			}
 		}
 		observator.stopActor(this);
-		System.out.println(observator.toString()+" see that "+getName()+" stop!");
+		System.out.println(observator.toString()+" see that "+getName()+" stops!");
 	}
 	/**
 	 * the temporization for using the ressources.
@@ -120,6 +126,7 @@ public abstract class Actor extends Thread{
 	 */
 	private void release() throws InterruptedException{
 		// to be completed
+		observator.releaseResource(this, resPre);
 		release(resPre);
 		
 	}
@@ -156,8 +163,28 @@ public abstract class Actor extends Thread{
 	
 	public void PrintMessage(String action){
 		System.out.println( getName()+ " ID: "
-				+ getId() + " start to "+action+": "+resPre.getMsg() + " at "+ AcquireTime+" finishing at: "+
-				releaseTime+" and occupying time: "+occupyTime+" ms");
+				+ getId() + " commence à "+action+": "+resPre.toString() + " à "+ AcquireTime+" et fini à: "+
+				releaseTime+" pendant: "+occupyTime+" ms");
+	}
+	
+	public String getAcquireTime() {
+		return AcquireTime;
+	}
+	public void setAcquireTime(Date date) {
+		AcquireTime = formatDate.format(date);
+	}
+	
+	public String getReleaseTime() {
+		return releaseTime;
+	}
+	public void setReleaseTime(Date date) {
+		this.releaseTime = formatDate.format(date);
+	}
+	public int getOccupyTime() {
+		return occupyTime;
+	}
+	public void setOccupyTime(int occupyTime) {
+		this.occupyTime = occupyTime;
 	}
 	
 }
