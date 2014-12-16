@@ -85,7 +85,7 @@ public class Simulator{
 				}catch(Exception e){e.printStackTrace();}			
 			}
 		}
-		Properties option = new Properties("jus/poc/rw/options/"+file);
+		Properties option = new Properties("jus/poc/rw/opt/"+file);
 		version = option.getProperty("version");
 		nbReaders = Math.max(0,new Aleatory(option.get("nbAverageReaders"),option.get("nbDeviationReaders")).next());
 		nbWriters = Math.max(0,new Aleatory(option.get("nbAverageWriters"),option.get("nbDeviationWriters")).next());
@@ -110,7 +110,7 @@ public class Simulator{
 		detector = new Detector();
 		observator = new Observator(new Observator(null));
 		observator.init(nbReaders+nbWriters, nbResources);
-		rePool = new ResourcePool(nbResources, detector, observator,"jus.poc.rw.v1.Version");
+		rePool = new ResourcePool(nbResources, detector, observator,version);
 		Aleatory aleaUsingReader = new Aleatory(readerAverageUsingTime, readerDeviationUsingTime);
 		Aleatory aleaVacanReader = new Aleatory(readerAverageVacationTime, readerDeviationVacationTime);
 		Aleatory aleaUsingWiriter = new Aleatory(writerAverageUsingTime, writerDeviationUsingTime);
