@@ -15,7 +15,8 @@ public class Reader extends Actor{
 	
 //	Version disk=null;
 	private ReentrantReadWriteLock readerLock = null;
-	private Version resLocal;
+//	private Version resLocal;
+	
 	
 
 	public Reader(Aleatory useLaw, Aleatory vacationLaw, Aleatory iterationLaw,
@@ -36,12 +37,14 @@ public class Reader extends Actor{
 		
 //		try {
 			//while (true) {
-		resLocal = (Version) resource;
+//		resLocal = (Version) resource;
 				readerLock.readLock().lock(); //vérrouiller
+				observator.acquireResource(this, resPre);
 				Version.setCurrentUser(this.getName()); //une fois obtenir la droit de y'acceder, on déclare l'occupation actuelle.
-				resLocal.setAcquireTime(new Date());
-				System.out.println("Je suis "+ getName()+ " dont ID est "
-				+ getId() + " en train de lire: "+resLocal.getMsg()  + " à "+ resLocal.getAcquireTime());
+				resPre.setAcquireTime(new Date());
+				AcquireTime = resPre.getAcquireTime();
+//				System.out.println(getName()+ " dont ID est "
+//				+ getId() + " en train de lire: "+resLocal.getMsg()  + " à "+ resLocal.getAcquireTime());
 //				
 //			}
 //		} catch (Exception e) {
@@ -62,8 +65,10 @@ public class Reader extends Actor{
 	@Override
 	protected void release(IResource resource) throws InterruptedException {
 		// TODO Auto-generated method stub
-		resLocal.setReleaseTime(new Date());
-		System.out.println("Je l'ai releasé à " + resLocal.getReleaseTime()); // Calculer le temps total d'utiliser le ressource
+		resPre.setReleaseTime(new Date());
+		releaseTime = resPre.getReleaseTime();
+		PrintMessage("read");
+		observator.releaseResource(this, resPre);
 		readerLock.readLock().unlock();// dévérouiller
 	}
 

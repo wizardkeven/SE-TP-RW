@@ -86,7 +86,7 @@ public class Version extends Resource{
 	}
 
 	public void setReleaseTime(Date endingTime) {
-//		this.releaseTime = formatDate.format(endingTime.compareTo(Date.parse(acquireTime)));
+		this.releaseTime = formatDate.format(endingTime);
 //		formatDate.f
 	}
 

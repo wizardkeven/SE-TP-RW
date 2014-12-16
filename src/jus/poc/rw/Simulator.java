@@ -108,6 +108,8 @@ public class Simulator{
 		init((args.length==1)?args[0]:OPTIONFILENAME);
 		//to be completed
 		detector = new Detector();
+		observator = new Observator(new Observator(null));
+		observator.init(nbReaders+nbWriters, nbResources);
 		rePool = new ResourcePool(nbResources, detector, observator,"jus.poc.rw.v1.Version");
 		Aleatory aleaUsingReader = new Aleatory(readerAverageUsingTime, readerDeviationUsingTime);
 		Aleatory aleaVacanReader = new Aleatory(readerAverageVacationTime, readerDeviationVacationTime);

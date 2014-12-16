@@ -12,6 +12,7 @@ import jus.poc.rw.Aleatory;
 import jus.poc.rw.IResource;
 import jus.poc.rw.control.IObservator;
 import jus.poc.rw.deadlock.DeadLockException;
+import jus.poc.rw.v1.Version;
 
 /**
  * Define the global behavior of an actor in Reader/writer protocol.
@@ -34,7 +35,10 @@ public abstract class Actor extends Thread{
 	/** the rank of the last access done or under execution */
 	protected int accessRank;
 	
-	private Resource resPre;//une resource utilisé pour objectif 1
+	protected Version resPre;//une resource utilisé pour objectif 1
+	protected int occupyTime;
+	protected String AcquireTime;
+	protected String releaseTime;
 	
 	
 	
@@ -46,7 +50,8 @@ public abstract class Actor extends Thread{
 	 * @param selection the resources to used
 	 * @param observator th observator of the comportment
 	 */
-	public Actor(Aleatory useLaw, Aleatory vacationLaw, Aleatory iterationLaw, IResource[] selection, IObservator observator,ReentrantReadWriteLock readWriteLock){
+	public Actor(Aleatory useLaw, Aleatory vacationLaw, 
+			Aleatory iterationLaw, IResource[] selection, IObservator observator,ReentrantReadWriteLock readWriteLock){
 		this.ident = identGenerator++;
 		resources = selection;
 		this.useLaw = useLaw;
@@ -60,7 +65,9 @@ public abstract class Actor extends Thread{
 	 */
 	public void run(){
 		// to be completed
-		resPre = (Resource) resources[0];
+		observator.startActor(this);
+		System.out.println(observator.toString()+" see that "+getName()+" start!");
+		resPre = (Version) resources[0];
 		for(accessRank=1; accessRank!=nbIteration; accessRank++) {
 			temporizationVacation(vacationLaw.next());
 			try {
@@ -72,7 +79,8 @@ public abstract class Actor extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			temporizationUse(useLaw.next());
+			occupyTime = useLaw.next();
+			temporizationUse(occupyTime);
 			try {
 				release();
 			} catch (InterruptedException e) {
@@ -80,6 +88,8 @@ public abstract class Actor extends Thread{
 				e.printStackTrace();
 			}
 		}
+		observator.stopActor(this);
+		System.out.println(observator.toString()+" see that "+getName()+" stop!");
 	}
 	/**
 	 * the temporization for using the ressources.
@@ -101,6 +111,7 @@ public abstract class Actor extends Thread{
 	private void acquire() throws InterruptedException, DeadLockException{
 		// to be completed
 		//Resource res = (Resource) resources[0]; 
+		observator.requireResource(this, resPre);
 		acquire(resPre);
 	}
 	/**
@@ -142,5 +153,11 @@ public abstract class Actor extends Thread{
 	 * @return the rank of the last access done or under execution
 	 */
 	public final int accessRank(){return accessRank;}
+	
+	public void PrintMessage(String action){
+		System.out.println( getName()+ " ID: "
+				+ getId() + " start to "+action+": "+resPre.getMsg() + " at "+ AcquireTime+" finishing at: "+
+				releaseTime+" and occupying time: "+occupyTime+" ms");
+	}
 	
 }
