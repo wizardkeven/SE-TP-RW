@@ -14,7 +14,7 @@ import jus.poc.rw.Aleatory;
 import jus.poc.rw.IResource;
 import jus.poc.rw.control.IObservator;
 import jus.poc.rw.deadlock.DeadLockException;
-import jus.poc.rw.v1.Version;
+import jus.poc.rw.v1.Version1;
 
 /**
  * Define the global behavior of an actor in Reader/writer protocol.
@@ -37,7 +37,7 @@ public abstract class Actor extends Thread{
 	/** the rank of the last access done or under execution */
 	protected int accessRank;
 	
-	protected Version resPre;//une resource utilisé pour objectif 1
+	protected Resource resPre;//une resource utilisé pour objectif 1
 	private int occupyTime;
 	private String AcquireTime; 
 	SimpleDateFormat formatDate; //date formatting tool
@@ -72,8 +72,8 @@ public abstract class Actor extends Thread{
 	public void run(){
 		// to be completed
 		observator.startActor(this);
-		System.out.println(observator.toString()+" see that "+getName()+" is starting!");
-		resPre = (Version) resources[0];
+//		System.out.println(observator.toString()+" see that "+getName()+" is starting!");
+		resPre = (Resource) resources[0];
 		for(accessRank=1; accessRank!=nbIteration; accessRank++) {
 			temporizationVacation(vacationLaw.next());
 			try {
@@ -162,9 +162,8 @@ public abstract class Actor extends Thread{
 	public final int accessRank(){return accessRank;}
 	
 	public void PrintMessage(String action){
-		System.out.println( getName()+ " ID: "
-				+ getId() + " commence à "+action+": "+resPre.toString() + " à "+ AcquireTime+" et fini à: "+
-				releaseTime+" pendant: "+occupyTime+" ms");
+		System.out.println( getName() + " commence à "+action+": " + " à "+ AcquireTime+" et fini à: "+
+				releaseTime+" pendant: "+occupyTime+" ms"+"\n");//+resPre.toString()+ " ID: "+ getId() 
 	}
 	
 	public String getAcquireTime() {
@@ -185,6 +184,12 @@ public abstract class Actor extends Thread{
 	}
 	public void setOccupyTime(int occupyTime) {
 		this.occupyTime = occupyTime;
+	}
+	public int getNbIteration() {
+		return nbIteration;
+	}
+	public int getAccessRank() {
+		return accessRank;
 	}
 	
 }

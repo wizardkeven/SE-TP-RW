@@ -89,7 +89,7 @@ public class Simulator{
 		version = option.getProperty("version");
 		nbReaders = Math.max(0,new Aleatory(option.get("nbAverageReaders"),option.get("nbDeviationReaders")).next());
 		nbWriters = Math.max(0,new Aleatory(option.get("nbAverageWriters"),option.get("nbDeviationWriters")).next());
-		nbResources = 1; //Math.max(0,new Aleatory(option.get("nbAverageResources"),option.get("nbDeviationResources")).next());
+		nbResources = Math.max(0,new Aleatory(option.get("nbAverageResources"),option.get("nbDeviationResources")).next());
 		nbSelection = Math.max(0,Math.min(new Aleatory(option.get("nbAverageSelection"),option.get("nbDeviationSelection")).next(),nbResources));
 		readerAverageUsingTime = Math.max(0,option.get("readerAverageUsingTime"));
 		readerDeviationUsingTime = Math.max(0,option.get("readerDeviationUsingTime"));
@@ -107,6 +107,8 @@ public class Simulator{
 		// set the application parameters
 		init((args.length==1)?args[0]:OPTIONFILENAME);
 		//to be completed
+		Version1.minNbReader=nbReaders;
+		Version1.minNbWriter=nbWriters;
 		detector = new Detector();
 		observator = new Observator(new Observator(null));
 		observator.init(nbReaders+nbWriters, nbResources);

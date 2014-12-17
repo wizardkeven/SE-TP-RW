@@ -8,7 +8,7 @@ import jus.poc.rw.Aleatory;
 import jus.poc.rw.IResource;
 import jus.poc.rw.control.IObservator;
 import jus.poc.rw.deadlock.DeadLockException;
-import jus.poc.rw.v1.Version;
+import jus.poc.rw.v1.Version1;
 
 public class Writer extends Actor{
 
