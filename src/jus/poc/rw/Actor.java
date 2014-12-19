@@ -43,6 +43,7 @@ public abstract class Actor extends Thread{
 	SimpleDateFormat formatDate; //date formatting tool
 	public ReentrantReadWriteLock lock;//lock for all members
 	private String releaseTime;
+	public boolean iterationFinished = false;
 	
 	
 	
@@ -95,7 +96,9 @@ public abstract class Actor extends Thread{
 			}
 		}
 		observator.stopActor(this);
-		System.out.println(observator.toString()+" see that "+getName()+" stops!");
+		int time = nbIteration - accessRank;
+		iterationFinished = true;
+		System.out.println(observator.toString()+" see that "+getName()+" stops! "+time+"\n");
 	}
 	/**
 	 * the temporization for using the ressources.
@@ -190,6 +193,9 @@ public abstract class Actor extends Thread{
 	}
 	public int getAccessRank() {
 		return accessRank;
+	}
+	public Resource getResPre() {
+		return resPre;
 	}
 	
 }
