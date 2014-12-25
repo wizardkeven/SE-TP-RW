@@ -73,9 +73,29 @@ public abstract class Actor extends Thread{
 	public void run(){
 		// to be completed
 		observator.startActor(this);
-//		System.out.println(observator.toString()+" see that "+getName()+" is starting!");
+		System.out.println(observator.toString()+" see that "+getName()+" is starting! \n");
 		resPre = (Resource) resources[0];
 		for(accessRank=1; accessRank!=nbIteration; accessRank++) {
+			temporizationVacation(vacationLaw.next());
+			try {
+				acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DeadLockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			setOccupyTime(useLaw.next());
+			temporizationUse(getOccupyTime());
+			try {
+				release();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (nbIteration == 1) {
 			temporizationVacation(vacationLaw.next());
 			try {
 				acquire();

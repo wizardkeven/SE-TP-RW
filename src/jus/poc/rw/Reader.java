@@ -35,7 +35,7 @@ public class Reader extends Actor{
 		// TODO Auto-generated method stub
 		//disk = (Version) resource;
 		resPre.beginR(this);
-//		observator.acquireResource(this, resPre);
+		observator.acquireResource(this, resPre);
 //		try {
 			//while (true) {
 //		resLocal = (Version) resource;
@@ -58,7 +58,7 @@ public class Reader extends Actor{
 	protected void release(IResource resource) throws InterruptedException {
 		// TODO Auto-generated method stub
 		resPre.endR(this);
-//		observator.releaseResource(this, resPre);
+		observator.releaseResource(this, resPre);
 ////		resPre.setReleaseTime(new Date());
 ////		releaseTime = resPre.getReleaseTime();
 ////		PrintMessage("read");
