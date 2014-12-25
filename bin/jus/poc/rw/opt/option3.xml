@@ -31,5 +31,6 @@
 	<!-- the law to determine the number of access a writers does -->
 	<entry key="writerAverageIteration">20</entry>
 	<entry key="writerDeviationIteration">2</entry>
-	<!-- add this entry for the version v3 to fix the policy <entry key="policy">LOW_WRITE</entry> -->
+	<entry key="policy">LOW_WRITE</entry>
+	<!-- add this entry for the version v3 to fix the policy  -->
 </properties>

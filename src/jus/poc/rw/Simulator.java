@@ -135,6 +135,9 @@ public class Simulator{
 					aleaIterationWriter, rePool.selection(1), observator,readWriteLock);
 //			IResource[] resVersion= rePool.selection(1);
 //			writers[i].acquire(resVersion[0]);
+			if (i%2 == 0) {
+				writers[i].setPriority(Thread.MAX_PRIORITY);
+			}
 			writers[i].start();
 //			System.out.println(writers[i].getName() + " of ID: " + writers[i].getId());
 		}

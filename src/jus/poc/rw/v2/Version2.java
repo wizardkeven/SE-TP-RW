@@ -58,21 +58,21 @@ public class Version2 extends Version1{
 	protected volatile int timeLeftWriter = 0; //current writers' number in the system
 	protected volatile int write = 0; // counter of writers being executing in the system
 	protected volatile int read = 0; // counter of readers being executing in the system 
-	private  boolean writersFinished = false;
-	private volatile int finishedWritingNb=0;
-	private volatile int finishedReadingNb=0;
-	private  boolean readersFinished = false;
-	private volatile boolean rwFinished=false;
-	private volatile boolean remainOneWriter = false;
-	volatile boolean tempFlag = true;
-	private volatile int totalCurrentReaderNb = minNbReader;
+	protected  boolean writersFinished = false;
+	protected volatile int finishedWritingNb=0;
+	protected volatile int finishedReadingNb=0;
+	protected  boolean readersFinished = false;
+	protected volatile boolean rwFinished=false;
+	protected volatile boolean remainOneWriter = false;
+//	volatile boolean tempFlag = true;
+	protected volatile int totalCurrentReaderNb = minNbReader;
 	int nbGeneReaders = 0;
 //	private boolean generateNewReader = false;
-	private Map<Actor, Integer> writerTimeLeftMap;
+	protected Map<Actor, Integer> writerTimeLeftMap;
 	Aleatory aleaUsingReader;
 	Aleatory aleaVacanReader;
 	Aleatory aleaIterationWriter;
-	volatile int readerFiniWriterWait = 0;
+	protected volatile int readerFiniWriterWait = 0;
 	
 	public Version2(IDetector detector, IObservator observator) {
 		super(detector, observator);
@@ -81,7 +81,7 @@ public class Version2 extends Version1{
 		writerTimeLeftMap = new HashMap<Actor, Integer>();
 	}
 
-	private void getParaFromXML() {
+	protected void getParaFromXML() {
 		// TODO Auto-generated method stub
 		// Retrieve the parameters of the application
 				final class Properties extends java.util.Properties {
@@ -207,7 +207,7 @@ public class Version2 extends Version1{
 //					timeLeftWriter-=currentReadNb;
 					
 //					if (!remainOneWriter) { // if remains just one writer waiting, we leave creation work for writer
-						tempFlag = CallToGenerateReaders();
+						 CallToGenerateReaders();
 //					}
 				}
 			}
@@ -297,6 +297,7 @@ public class Version2 extends Version1{
 //		System.out.println(writer.getName()+ " time left "+leftTimes+" maxTime "+timeLeftWriter+ 
 //				" currentReadernb "+ currentReadNb+ " writersFinished "+writersFinished+" finishedReadingNb "+finishedReadingNb+" totalCurrentReaderNb "+totalCurrentReaderNb+" readersfinished "+readersFinished+ " readerFiniWriterWait "+ readerFiniWriterWait +"\n");
 		writer.PrintMessage("écrire "+ " time left "+timeLeftWriter+" currentReadernb "+ currentReadNb);
+//		System.out.println(writer.getPriority());
 	}
 	
 	/**
@@ -373,21 +374,21 @@ public class Version2 extends Version1{
 		this.currentReadNb = currentReadNb;
 	}
 	
-	/*
-	 * every call from reader will increase the reading number by 1
-	 * every call from writer will decrease the reading number to 0
-	 * synchronized makes sure the atomicity of the adding action on the read nb
-	 */
-	synchronized void increaseCurrentReadNb(Actor actor){
-		if (actor instanceof Reader) {
-			currentReadNb++;
-		}else if (actor instanceof Writer) {
-			currentReadNb=0;
-		}else {
-			System.out.println("unknown actor type accedes!");
-			return;
-		}
-		
-	}
+//	/*
+//	 * every call from reader will increase the reading number by 1
+//	 * every call from writer will decrease the reading number to 0
+//	 * synchronized makes sure the atomicity of the adding action on the read nb
+//	 */
+//	synchronized void increaseCurrentReadNb(Actor actor){
+//		if (actor instanceof Reader) {
+//			currentReadNb++;
+//		}else if (actor instanceof Writer) {
+//			currentReadNb=0;
+//		}else {
+//			System.out.println("unknown actor type accedes!");
+//			return;
+//		}
+//		
+//	}
 	
 }
