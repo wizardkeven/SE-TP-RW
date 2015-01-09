@@ -47,7 +47,7 @@ public class Version3 extends Version2 {
 			
 			
 //			System.out.println(reader.getName()+" is waiting for writer with a higher priority finishing! "+currentWritingPriority+" \n");
-			try {
+//			try {
 				while(write>0){				
 					onWritingCondition.await();
 				}
@@ -57,14 +57,14 @@ public class Version3 extends Version2 {
 					writerPriorityCondition.await();
 				}
 				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}finally{
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}finally{
 				read++;
 				reader.setAcquireTime(new Date());//mark the current time stamp
 //				rwConditionalLock.unlock();
-			}
+//			}
 			
 		}else {
 			System.out.println("Abnormal read request!");
@@ -80,7 +80,7 @@ public class Version3 extends Version2 {
 			DeadLockException {
 		// TODO Auto-generated method stub
 		if (writer instanceof Writer) {
-			try {
+//			try {
 				rwConditionalLock.lock();
 				while(read>0){
 					onReadingCondition.await();
@@ -110,15 +110,15 @@ public class Version3 extends Version2 {
 					System.out.println(writer.getName()+" passes for writer with a higher priority finished! \n");
 				}
 			
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}finally{
-			
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}finally{
+//			
 				write++;
 				writer.setAcquireTime(new Date()); //mark the current time stamp
 //				rwConditionalLock.unlock();
-			}
+//			}
 			
 
 //			rwConditionalLock.tryLock();
@@ -134,13 +134,7 @@ public class Version3 extends Version2 {
 	 * 
 	 */
 	protected void setCurrentWritingPrio(boolean currentValue) {
-		rwConditionalLock.lock();
 			currentWritingPriority = currentValue;
-			if (!currentWritingPriority) {
-//			notify();
-				writerPriorityCondition.signal();
-			}
-		rwConditionalLock.unlock();
 	}
 
 	protected boolean getCurrentWritingPrio() {
@@ -150,7 +144,7 @@ public class Version3 extends Version2 {
 	public void endR(Actor reader) throws InterruptedException {
 		// TODO Auto-generated method stub
 //		rwConditionalLock.lock();
-		try {
+//		try {
 			reader.setReleaseTime(new Date());				
 			read--;
 			onReadingCondition.signal();
@@ -159,12 +153,12 @@ public class Version3 extends Version2 {
 //				+ " readersinished "+readersFinished+" currentReadernb " + currentReadNb  + writersFinished  +" finishedReadingNb "+finishedReadingNb
 //				+" totalCurrentReaderNb "+totalCurrentReaderNb+ " readerFiniWriterWait "+ readerFiniWriterWait+" iteNb "+(reader.getNbIteration() - reader.getAccessRank())+" "+write);
 			reader.PrintMessage("lire"+ " readersinished "+readersFinished+" currentReadernb " + currentReadNb);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}finally{
 			rwConditionalLock.unlock();
-		}
+//		}
 
 
 		
@@ -175,7 +169,7 @@ public class Version3 extends Version2 {
 		// TODO Auto-generated method stub
 //		rwConditionalLock.lock();
 		
-		try {
+//		try {
 			writer.setReleaseTime(new Date());
 			
 			write--;
@@ -194,13 +188,13 @@ public class Version3 extends Version2 {
 			}
 				
 
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
+//			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}finally{
 			rwConditionalLock.unlock();
-		}
+//		}
 		
 		
 	}
